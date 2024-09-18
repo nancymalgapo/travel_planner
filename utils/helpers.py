@@ -11,10 +11,10 @@ from typing import Tuple
 
 def send_email(itinerary: str, recipient_email: str):
     try:
-        smtp_server = st.secrets["smtp_server"]
-        smtp_port = st.secrets["smtp_port"]
-        sender_email = st.secrets["email_user"]
-        sender_password = st.secrets["email_pass"]
+        smtp_server = st.secrets["smptp"]["server"]
+        smtp_port = st.secrets["smtp"]["port"]
+        sender_email = st.secrets["smtp"]["email_user"]
+        sender_password = st.secrets["smtp"]["email_pass"]
 
         msg = MIMEText(itinerary)
         msg['Subject'] = 'Your Travel Itinerary'
