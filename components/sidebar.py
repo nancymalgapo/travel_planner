@@ -35,11 +35,11 @@ def app_sidebar():
         help="Select your travel reason",
     )
 
-    budget = st.sidebar.slider("Your budget", min_value=3000, max_value=1000000)
+    budget = st.sidebar.slider("Your budget", min_value=2000, max_value=1000000)
     st.sidebar.write("PHP", budget)
 
     if st.sidebar.button("Plan My Travel"):
-        openai.api_key = st.secrets["openai"][key]
+        openai.api_key = st.secrets["openai"]["key"]
         error_message, is_valid = is_valid_input(departure_date, return_date, openai.api_key)
         if is_valid:
             with st.spinner("Generating itinerary based on your preferences .."):
