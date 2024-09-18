@@ -14,29 +14,34 @@ def app_sidebar():
     return_date = st.sidebar.date_input(
         label="Select a return date",
         key="return_date",
-        help="Choose the date of return.",
+        help="Choose the date of return."
     )
 
     origin = st.sidebar.selectbox(
         "Origin",
         options=destinations,
-        help="Select your target destination",
+        help="Select your target destination"
     )
 
     destination = st.sidebar.selectbox(
         "Destination",
         options=destinations,
-        help="Select your target destination",
+        help="Select your target destination"
     )
 
     trip_type = st.sidebar.selectbox(
         "Select a travel reason",
         options=["Solo", "Business", "Romantic", "Friends", "Family"],
-        help="Select your travel reason",
+        help="Select your travel reason"
     )
 
-    budget = st.sidebar.slider("Your budget", min_value=2000, max_value=1000000)
-    st.sidebar.write("PHP", budget)
+    budget = st.sidebar.selectbox(
+        "Your budget",
+        options=budget_ranges,
+        help="Select your budget range",
+    )
+    min_budget, max_budget = map(int, budget.replace(",", "").split(" to "))
+    st.sidebar.write(f"You selected a budget between PHP{min_budget} and PHP{max_budget}.")
 
     if st.sidebar.button("Plan My Travel"):
         openai.api_key = st.secrets["openai"]["key"]
@@ -48,8 +53,8 @@ def app_sidebar():
                     response = openai.Completion.create(
                         engine="gpt-3.5-turbo-instruct",
                         prompt=f"Generated a travel itinerary from {origin} to {destination} from {departure_date} to "
-                               f"{return_date} with a budget of PHP{budget} for a {trip_type} trip.",
-                        max_tokens=300
+                               f"{return_date} with a budget between PHP{min_budget} to PHP{max_budget} for a {trip_type} trip.",
+                        max_tokens=150
                     )
                     itinerary = response.choices[0].text.strip()
                     st.success("Here’s your itinerary:")
